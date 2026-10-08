@@ -28,7 +28,7 @@ const AddProduct = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/admin/add-product",
+        "https://next-resort-project-ten.vercel.app/api/admin/add-product",
         {
           method: "POST",
           body: data,
