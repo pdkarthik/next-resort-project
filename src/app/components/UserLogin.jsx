@@ -1,0 +1,60 @@
+"use client";
+
+import { useState } from "react";
+import { loginAction } from "../serverActions/loginAction";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+const UserLogin = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const loginHandler = async (e) => {
+    e.preventDefault();
+
+    const loginDetails = { email, password };
+    console.log("loginDetails:", loginDetails);
+
+    try {
+      const response = await loginAction(loginDetails);
+      if (response.success) {
+        router.push("/");
+      } else {
+        setError(response.message || "Login Failed, try again");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  return (
+    <div className="formContainer">
+      <h1>Login Here</h1>
+      <form onSubmit={loginHandler} className="formSection">
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        <h3>Email</h3>
+        <input
+          type="text"
+          name="email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <h3>Password</h3>
+        <input
+          type="text"
+          name="password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <br />
+        <br />
+        <button type="submit">Login</button>
+      </form>
+      <h3>
+        Not Registered Yet? <Link href="/register">Register</Link>
+      </h3>
+    </div>
+  );
+};
+
+export default UserLogin;
